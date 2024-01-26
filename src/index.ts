@@ -1,12 +1,15 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express } from "express";
 import bodyParser from "body-parser";
+import { buyerRouter } from "./routes/buyer";
+import { sellerRouter } from "./routes/seller";
+import authRouter from "./routes/auth";
 
 const app: Express = express();
 
 app.use(bodyParser.json());
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello robin here");
-});
+app.use("/api/auth", authRouter);
+app.use("/api/buyer", buyerRouter);
+app.use("/api/seller", sellerRouter);
 
 const PORT = 3000;
 
