@@ -1,5 +1,6 @@
 import express, { Express } from "express";
 import bodyParser from "body-parser";
+import 'dotenv/config';
 import { buyerRouter } from "./routes/buyer";
 import { sellerRouter } from "./routes/seller";
 import authRouter from "./routes/auth";

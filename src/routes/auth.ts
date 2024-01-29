@@ -7,6 +7,7 @@ const authRouter = Router();
 
 authRouter.post("/register", async (req: Request, res: Response) => {
   try {
+    // console.log(req,'reqqq')
     const { username, password, userType } = req.body;
 
     //check if user exists
