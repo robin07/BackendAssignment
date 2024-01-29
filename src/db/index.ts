@@ -6,7 +6,7 @@ mongoose.connect(`${process.env.MONGODB_URI}`);
 const UserSchema = new mongoose.Schema({
   username: String,
   password: String,
-  userType: Role,
+  userType: { type: String, enum: Role },
 });
 
 const ProductSchema = new mongoose.Schema({

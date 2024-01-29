@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 const authRouter = Router();
-const JWT_SECRET = process.env.JWT_SECRET;
 
 authRouter.post("/register", async (req: Request, res: Response) => {
   try {
