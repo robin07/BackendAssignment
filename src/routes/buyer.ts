@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express";
 import { authMiddleware } from "../middleware/auth";
+import { User } from "../db";
 
 const buyerRouter = Router();
 
@@ -7,14 +8,21 @@ const buyerRouter = Router();
 buyerRouter.get(
   "/list_sellers",
   authMiddleware,
-  (req: Request, res: Response) => {}
+  async (req: Request, res: Response) => {
+    const allSellers = await User.find({ userType: "seller" }, { username: 1 });
+    res.status(200).json({
+      data: allSellers,
+    });
+  }
 );
 
 //Get the catalog of seller by seller_id
 buyerRouter.get(
   "/seller_catalog/:seller_id",
   authMiddleware,
-  (req: Request, res: Response) => {}
+  async(req: Request, res: Response) => {
+    
+  }
 );
 
 //Send a list of item to create an order for seller with id=seller_id

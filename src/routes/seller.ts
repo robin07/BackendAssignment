@@ -1,6 +1,5 @@
 import { Router, Request, Response } from "express";
 import { authMiddleware } from "../middleware/auth";
-import { Product } from "../db";
 import { Catalog } from "../db";
 
 const sellerRouter = Router();
@@ -14,32 +13,28 @@ sellerRouter.get("/orders", authMiddleware, (req: any, res: Response) => {
 
 //Send a list of items to create catalog for seller
 sellerRouter.post(
-  "/create_catalog/:seller_id",
+  "/create_catalog",
   authMiddleware,
   async (req: Request, res: Response) => {
     const items = req.body;
-    if (items.length > 0) {
-      try {
-        const promiseResult = await Promise.all(
-          items.map(async (item: { name: string; price: number }) => {
-            const product = await Product.create({
-              name: item.name,
-              price: item.price,
-            });
-            return await Catalog.create({
-              sellerId: req?.params?.seller_id,
-              productId: product?._id,
-            });
-          })
-        );
-        res.status(200).json({
-          data: promiseResult,
-        });
-      } catch (err) {
-        res.status(500).json({
-          msg: `Error is ${err}`,
-        });
-      }
+    try {
+      items.map(
+        async (item: { name: string; price: number; sellerId: string }) => {
+          const catalog = await Catalog.create({
+            sellerId: item?.sellerId,
+            name: item?.name,
+            price: item?.price,
+          });
+          return catalog;
+        }
+      );
+      res.status(200).json({
+        message: "Catalog Created Successfully",
+      });
+    } catch (err) {
+      res.status(500).json({
+        msg: `Error is ${err}`,
+      });
     }
   }
 );
