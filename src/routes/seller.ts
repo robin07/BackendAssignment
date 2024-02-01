@@ -41,9 +41,6 @@ sellerRouter.post(
         });
       }
     }
-    res.status(200).json({
-      message: "No items have been sent",
-    });
   }
 );
 
