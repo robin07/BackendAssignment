@@ -1,6 +1,8 @@
 import { Router, Request, Response } from "express";
 import { authMiddleware } from "../middleware/auth";
 import { User } from "../db";
+import { Product } from "../db";
+import { Order } from "../db";
 
 const buyerRouter = Router();
 
@@ -20,8 +22,16 @@ buyerRouter.get(
 buyerRouter.get(
   "/seller_catalog/:seller_id",
   authMiddleware,
-  async(req: Request, res: Response) => {
-    
+  async (req: Request, res: Response) => {
+    const sellerCatalog = await Product.find(
+      {
+        sellerId: req?.params?.seller_id,
+      },
+      { name: 1, price: 1 }
+    );
+    res.status(200).json({
+      data: sellerCatalog,
+    });
   }
 );
 
@@ -29,7 +39,32 @@ buyerRouter.get(
 buyerRouter.post(
   "/create-order/:seller_id",
   authMiddleware,
-  (req: Request, res: Response) => {}
+  async (req: any, res: Response) => {
+    // send list of items refers to send product ids
+    const itemsList = req.body;
+    try {
+      if (req.userType === "buyer") {
+        itemsList.forEach(
+          async (item: { orderedBy: string; productId: string }) => {
+            await Order.create({
+              orderedBy: item?.orderedBy,
+              sellerId: req?.params?.seller_id,
+              productId: item?.productId,
+            });
+          }
+        );
+        res.status(200).json({ message: "Order Created Successfully" });
+      } else {
+        res.status(403).json({
+          message: "Role must be buyer",
+        });
+      }
+    } catch (err) {
+      res.status(500).json({
+        msg: `Error is ${err}`,
+      });
+    }
+  }
 );
 
 export { buyerRouter };

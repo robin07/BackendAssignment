@@ -14,7 +14,7 @@ const UserSchema = new mongoose.Schema({
 //   price: Number,
 // });
 
-const CatalogSchema = new mongoose.Schema({
+const ProductSchema = new mongoose.Schema({
   sellerId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
   name: String,
@@ -28,6 +28,6 @@ const OrderSchema = new mongoose.Schema({
 });
 
 export const User = mongoose.model("User", UserSchema);
-// export const Product = mongoose.model("Product", ProductSchema);
-export const Catalog = mongoose.model("Catalog", CatalogSchema);
+export const Product = mongoose.model("Product", ProductSchema);
+// export const Catalog = mongoose.model("Catalog", CatalogSchema);
 export const Order = mongoose.model("Order", OrderSchema);

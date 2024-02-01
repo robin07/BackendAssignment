@@ -1,6 +1,6 @@
 import { Router, Request, Response } from "express";
 import { authMiddleware } from "../middleware/auth";
-import { Catalog } from "../db";
+import { Product } from "../db";
 
 const sellerRouter = Router();
 
@@ -20,7 +20,7 @@ sellerRouter.post(
     try {
       items.map(
         async (item: { name: string; price: number; sellerId: string }) => {
-          const catalog = await Catalog.create({
+          const catalog = await Product.create({
             sellerId: item?.sellerId,
             name: item?.name,
             price: item?.price,
