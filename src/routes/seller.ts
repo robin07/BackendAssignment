@@ -32,22 +32,28 @@ sellerRouter.get(
 sellerRouter.post(
   "/create_catalog",
   authMiddleware,
-  async (req: Request, res: Response) => {
+  async (req: any, res: Response) => {
     const items = req.body;
     try {
-      items.map(
-        async (item: { name: string; price: number; sellerId: string }) => {
-          const catalog = await Product.create({
-            sellerId: item?.sellerId,
-            name: item?.name,
-            price: item?.price,
-          });
-          return catalog;
-        }
-      );
-      res.status(200).json({
-        message: "Catalog Created Successfully",
-      });
+      if (req.userType === "seller") {
+        items.map(
+          async (item: { name: string; price: number; sellerId: string }) => {
+            const catalog = await Product.create({
+              sellerId: item?.sellerId,
+              name: item?.name,
+              price: item?.price,
+            });
+            return catalog;
+          }
+        );
+        res.status(200).json({
+          message: "Catalog Created Successfully",
+        });
+      } else {
+        res.status(403).json({
+          msg: "Role must be seller",
+        });
+      }
     } catch (err) {
       res.status(500).json({
         msg: `Error is ${err}`,

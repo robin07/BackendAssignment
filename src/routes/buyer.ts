@@ -11,10 +11,19 @@ buyerRouter.get(
   "/list_sellers",
   authMiddleware,
   async (req: Request, res: Response) => {
-    const allSellers = await User.find({ userType: "seller" }, { username: 1 });
-    res.status(200).json({
-      data: allSellers,
-    });
+    try {
+      const allSellers = await User.find(
+        { userType: "seller" },
+        { username: 1 }
+      );
+      res.status(200).json({
+        data: allSellers,
+      });
+    } catch (err) {
+      res.status(500).json({
+        msg: `Error is ${err}`,
+      });
+    }
   }
 );
 
@@ -23,15 +32,21 @@ buyerRouter.get(
   "/seller_catalog/:seller_id",
   authMiddleware,
   async (req: Request, res: Response) => {
-    const sellerCatalog = await Product.find(
-      {
-        sellerId: req?.params?.seller_id,
-      },
-      { name: 1, price: 1 }
-    );
-    res.status(200).json({
-      data: sellerCatalog,
-    });
+    try {
+      const sellerCatalog = await Product.find(
+        {
+          sellerId: req?.params?.seller_id,
+        },
+        { name: 1, price: 1 }
+      );
+      res.status(200).json({
+        data: sellerCatalog,
+      });
+    } catch (err) {
+      res.status(500).json({
+        msg: `Error is ${err}`,
+      });
+    }
   }
 );
 
